@@ -5,7 +5,7 @@ Group project for CSC3170 (Database System)
 
 ## ER Diagram of the database
 
-<img src="./ERD.png" alt="ER_diagram" style="zoom:50%;" />
+<img src="./ER_diagram.png" alt="ER_diagram" style="zoom:50%;" />
 
 
 
