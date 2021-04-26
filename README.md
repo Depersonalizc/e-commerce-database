@@ -4,12 +4,11 @@ Group project for CSC3170 (Database System)
 
 ## Relational schemas
 - orders(orderID*, custID, sellerID, time, address, status)
-- order_item(orderID*, itemID*, quantity)
+- order_item(orderID*, itemID*, quantity, rating)
 - items(itemID*, sellerID, type, description, stock)
 - sellers(sellerID*, seller_name)
 - customers(custID*, cust_name, cust_gender, cust_age)
 - addresses(custID*, address*)
-- review(orderID*, itemID*, rating)
 
 
 ## ER Diagram of the database
