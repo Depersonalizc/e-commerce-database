@@ -40,33 +40,40 @@ class SellerAnalytics:
     def seller_id(self):
         return self._seller_id
 
-    def my_selling_items(self, order_by='itemID', rev=False):
+    def my_selling_items(self, order_by='itemID', asc=False):
         """
         Get all items sold by this seller,
-        ordered by some attributes in {'itemID', 'type', 'stock'}
+        ordered by some attributes in {'itemID', 'type', 'stock', 'quantity' (sales)}
 
-        :param order_by: one of {'itemID', 'type', 'stock', 'status'}
-        :param rev: whether to reverse the order
-        :return: [(itemID, type, description, stock)]
+        :param order_by: one of {'itemID', 'type', 'stock', 'status', 'quantity'}
+        :param asc: Whether order is ascending
+        :return: [(itemID, type, description, stock, quantity)]
         """
-        assert order_by in ('itemID', 'type', 'stock'), \
-            "can only order by one of {'itemID', 'type', 'stock'}!"
+        assert order_by in ('itemID', 'type', 'stock', 'quantity'), \
+            "can only order by one of {'itemID', 'type', 'stock', 'quantity'}!"
 
         self._cursor.execute(
-            "SELECT itemID, type, description, stock "
-            "FROM items "
+            "SELECT items.itemID, type, description, stock, SUM(quantity) "
+            "   FROM (SELECT itemID, quantity "
+            f"       FROM (SELECT orderID FROM orders WHERE sellerID = {self.seller_id}) oid "
+            "           NATURAL JOIN order_item"
+            "         ) odit "
+            "       RIGHT OUTER JOIN items USING (itemID)"
             f"WHERE sellerID = {self.seller_id} "
-            f"ORDER BY {order_by} {'DESC' if rev else ''}"
+            "GROUP BY items.itemID "
+            f"ORDER BY {order_by};"
         )
         return self._cursor.fetchall()
 
-    def item_info(self, item, order_by='itemID', rev=False):
+    # def my_selling_items_analytics(self):
+
+    def item_info(self, item, order_by='itemID', asc=False):
         """
         Get related info about an item specified by item ID or description.
 
-        :param item_id: ID of the item, or a string of description.
+        :param item: ID or description of the item.
         :param order_by: one of {'itemID', 'type', 'description', 'stock'}.
-        :param rev: whether to reverse the order.
+        :param asc: Whether order is ascending
         """
         assert order_by in ('itemID', 'type', 'description', 'stock'), \
             "can only order by one of {'itemID', 'type', 'description', 'stock'}!"
@@ -74,26 +81,26 @@ class SellerAnalytics:
         if isinstance(item, int):
             self._cursor.execute(
                 "SELECT itemID, type, description, stock FROM items "
-                f"WHERE itemID = {item}"
-                f"ORDER BY {order_by} {'DESC' if rev else ''}"
+                f"WHERE itemID = {item} "
+                f"ORDER BY {order_by} {'ASC' if asc else 'DESC'}"
             )
         elif isinstance(item, str):
             self._cursor.execute(
                 "SELECT itemID, type, description, stock FROM items "
                 f"WHERE description like '%{item}%' "
-                f"ORDER BY {order_by} {'DESC' if rev else ''}"
+                f"ORDER BY {order_by} {'ASC' if asc else 'DESC'}"
             )
         else:
             raise NotImplementedError
 
         return self._cursor.fetchall()
 
-    def my_orders(self, order_by='orderID', rev=False):
+    def my_orders(self, order_by='orderID', asc=False):
         """
         Get info of all orders of the seller.
 
         :param order_by: one of {'orderID', 'custID', 'time', 'status'}
-        :param rev: whether to reverse the order
+        :param asc: Whether order is ascending
         :return: [
                    (
                    orderID, itemID, description, quantity,
@@ -107,7 +114,7 @@ class SellerAnalytics:
 
         self._cursor.execute(
             "SELECT orders.orderID, custID, itemID, quantity, time, address, status "
-            "FROM orders JOIN order_item ON orders.orderID = order_item.orderID "
+            "FROM orders JOIN order_item USING (orderID) "
             f"WHERE orders.sellerID = {self.seller_id} "
             "GROUP BY orders.orderID "
             f"ORDER BY {order_by} "
@@ -131,8 +138,11 @@ if __name__ == '__main__':
     def disp(result):
         print('\n'.join(str(tup) for tup in result))
 
-    print("My selling items:")
-    disp(ana.my_selling_items(order_by='stock', rev=True))
+    print("My selling items, ordered by stock, ascending:")
+    disp(ana.my_selling_items(order_by='stock', asc=True))
+
+    print("My selling items, ordered by sales (quantity):")
+    disp(ana.my_selling_items(order_by='quantity', asc=False))
 
     print("Item whose description contains '3935':")
     disp(ana.item_info(item="3935"))
