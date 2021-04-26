@@ -43,18 +43,18 @@ class SellerAnalytics:
     def my_selling_items(self, order_by='itemID', asc=False):
         """
         Get all items sold by this seller,
-        ordered by some attributes in {'itemID', 'type', 'stock', 'SUM(quantity)' (sales)}
+        ordered by some attributes in {'itemID', 'type', 'stock', 'SUM(quantity)', AVG(rating)}
 
-        :param order_by: one of {'itemID', 'type', 'stock', 'status', 'SUM(quantity)'}
+        :param order_by: one of {'itemID', 'type', 'stock', 'status', 'SUM(quantity), AVG(rating)'}
         :param asc: Whether order is ascending
-        :return: [(itemID, type, description, stock, quantity)]
+        :return: [{itemID, type, description, stock, SUM(quantity), AVG(rating)}]
         """
-        assert order_by in ('itemID', 'type', 'stock', 'SUM(quantity)'), \
-            "can only order by one of {'itemID', 'type', 'stock', 'SUM(quantity)'}!"
+        options = {'itemID', 'type', 'stock', 'SUM(quantity)', 'AVG(rating)'}
+        assert order_by in options, f"can only order by one of {options}!"
 
         self._cursor.execute(
-            "SELECT items.itemID, type, description, stock, SUM(quantity) "
-            "   FROM (SELECT itemID, quantity "
+            "SELECT items.itemID, type, description, stock, SUM(quantity), AVG(rating) "
+            "   FROM (SELECT itemID, quantity, rating "
             f"       FROM (SELECT orderID FROM orders WHERE sellerID = {self.seller_id}) oid "
             "           NATURAL JOIN order_item"
             "         ) odit "
@@ -75,8 +75,8 @@ class SellerAnalytics:
         :param order_by: one of {'itemID', 'type', 'description', 'stock'}.
         :param asc: Whether order is ascending
         """
-        assert order_by in ('itemID', 'type', 'description', 'stock'), \
-            "can only order by one of {'itemID', 'type', 'description', 'stock'}!"
+        options = {'itemID', 'type', 'description', 'stock'}
+        assert order_by in options, f"can only order by one of {options}!"
 
         if isinstance(item, int):
             self._cursor.execute(
@@ -102,15 +102,15 @@ class SellerAnalytics:
         :param order_by: one of {'orderID', 'custID', 'time', 'status'}
         :param asc: Whether order is ascending
         :return: [
-                   (
+                   {
                    orderID, itemID, description, quantity,
                    custID, time, address, status
-                   )
+                   }
                 ]
         """
 
-        assert order_by in ('orderID', 'custID', 'time', 'status'), \
-            "can only order by one of {'orderID', 'custID', 'time', 'status'}!"
+        options = {'orderID', 'custID', 'time', 'status'}
+        assert order_by in options, f"can only order by one of {options}!"
 
         self._cursor.execute(
             "SELECT orders.orderID, custID, itemID, quantity, time, address, status "
@@ -121,8 +121,9 @@ class SellerAnalytics:
         )
         return self._cursor.fetchall()
 
+    # def rating_counts(self):
 
-    # def
+
 
 
 if __name__ == '__main__':
@@ -136,12 +137,16 @@ if __name__ == '__main__':
 
     def disp(result):
         print('\n'.join(str(tup) for tup in result))
+        print()
 
     print("My selling items, ordered by stock, ascending:")
     disp(ana.my_selling_items(order_by='stock', asc=True))
 
     print("My selling items, ordered by SUM(quantity), descending    (sales):")
     disp(ana.my_selling_items(order_by='SUM(quantity)', asc=False))
+
+    print("My selling items, ordered by AVG(rating), ascending:")
+    disp(ana.my_selling_items(order_by='AVG(rating)', asc=True))
 
     print("Item whose description contains '3935':")
     disp(ana.item_info(item="3935"))
