@@ -20,6 +20,7 @@ def get_cnx(config):
         return cnx
 
 
+
 class SellerAnalytics:
     """
     Analytics class of the e-commerce database
@@ -33,18 +34,17 @@ class SellerAnalytics:
         self._cursor = self._cnx.cursor(dictionary=True)  # Hopefully this will make cursor return a dict
         self._seller_id = seller_id
 
-    def login(self, seller_id):
-        self._seller_id = seller_id
-
     @property
     def seller_id(self):
         return self._seller_id
+
+    def login(self, seller_id):
+        self._seller_id = seller_id
 
     def my_selling_items(self, order_by='itemID', asc=False):
         """
         Get all items sold by this seller,
         ordered by some attributes in {'itemID', 'type', 'stock', 'SUM(quantity)', AVG(rating)}
-
         :param order_by: one of {'itemID', 'type', 'stock', 'status', 'SUM(quantity), AVG(rating)'}
         :param asc: Whether order is ascending
         :return: [{itemID, type, description, stock, SUM(quantity), AVG(rating)}]
@@ -70,10 +70,10 @@ class SellerAnalytics:
     def item_info(self, item, order_by='itemID', asc=False):
         """
         Get related info about an item specified by item ID or description.
-
         :param item: ID or description of the item.
         :param order_by: one of {'itemID', 'type', 'description', 'stock'}.
         :param asc: Whether order is ascending
+        :return : [{itemID, type, description, stock}]
         """
         options = {'itemID', 'type', 'description', 'stock'}
         assert order_by in options, f"can only order by one of {options}!"
@@ -82,13 +82,13 @@ class SellerAnalytics:
             self._cursor.execute(
                 "SELECT itemID, type, description, stock FROM items "
                 f"WHERE itemID = {item} "
-                f"ORDER BY {order_by} {'ASC' if asc else 'DESC'}"
+                f"ORDER BY {order_by} {'ASC' if asc else 'DESC'};"
             )
         elif isinstance(item, str):
             self._cursor.execute(
                 "SELECT itemID, type, description, stock FROM items "
                 f"WHERE description like '%{item}%' "
-                f"ORDER BY {order_by} {'ASC' if asc else 'DESC'}"
+                f"ORDER BY {order_by} {'ASC' if asc else 'DESC'};"
             )
         else:
             raise NotImplementedError
@@ -98,7 +98,6 @@ class SellerAnalytics:
     def my_orders(self, order_by='orderID', asc=False):
         """
         Get info of all orders of the seller.
-
         :param order_by: one of {'orderID', 'custID', 'time', 'status'}
         :param asc: Whether order is ascending
         :return: [
@@ -117,16 +116,75 @@ class SellerAnalytics:
             "FROM orders JOIN order_item USING (orderID) "
             f"WHERE orders.sellerID = {self.seller_id} "
             "GROUP BY orders.orderID "
-            f"ORDER BY {order_by} "
+            f"ORDER BY {order_by} {'ASC' if asc else 'DESC'};"
         )
         return self._cursor.fetchall()
 
-    # def rating_counts(self):
+    def my_customers(self, order_by='custID', asc=False):
+        """
+        Get info of all customers of the seller.
+                                                                    number of orders
+        :param order_by: one of {'custID', 'cust_name', 'cust_age', 'COUNT(custID)'}
+        :param asc: Whether order is ascending.
+        :return: [{'custID', 'cust_name', 'cust_age', 'COUNT(custID)'}]
+        """
+
+        options = {'custID', 'cust_name', 'cust_age', 'COUNT(custID)'}
+        assert order_by in options, f"can only order by one of {options}!"
+
+        self._cursor.execute(
+            "SELECT c.custID, c.cust_name, c.cust_gender, c.cust_age, COUNT(custID) "
+            "FROM customers as c NATURAL JOIN orders WHERE sellerID = 1 "
+            "GROUP BY custID "
+            f"ORDER BY {order_by} {'ASC' if asc else 'DESC'};"
+        )
+        return self._cursor.fetchall()
+
+    def rating_counts(self, asc=False):
+        """
+        Get counts of rating received.
+        :param asc: If set True, return counts for rating 0, 1, ..., 10,
+                           else, return counts for rating 10, 9, ..., 0.
+        """
+
+        self._cursor.execute(
+            "SELECT COUNT(rating) "
+            "FROM orders NATURAL JOIN order_item "
+            "WHERE sellerID = 1 "
+            "GROUP BY rating "
+            f"ORDER BY rating {'ASC' if asc else 'DESC'};"
+        )
+        return self._cursor.fetchall()
+
+    def sales_trend(self, timespan='monthly'):
+        """
+        Get trend of either daily, weekly, monthly, or yearly sales.
+        :param timespan: one of {'daily', 'weekly', 'monthly', or 'yearly'}.
+        """
+        options = {'daily', 'weekly', 'monthly', 'yearly'}
+        assert timespan in options, f"timespan can only be one of {options}!"
+
+        seconds = {'daily': 86400,
+                   'weekly': 604800,
+                   'monthly': 2678400,
+                   'yearly': 31556952}
+
+        self._cursor.execute(
+            "SELECT time, COUNT(orderID) "
+            "FROM orders WHERE sellerID = 1 "
+            f"GROUP BY UNIX_TIMESTAMP(time) DIV {seconds[timespan]} "
+            "ORDER BY time;"
+        )
+        return self._cursor.fetchall()
+
+
+
 
 
 
 
 if __name__ == '__main__':
+
     cfg = {
         'user': 'root',
         'password': '2333',
@@ -151,7 +209,15 @@ if __name__ == '__main__':
     print("Item whose description contains '3935':")
     disp(ana.item_info(item="3935"))
 
-    print("My orders, ordered by order_id:")
-    disp(ana.my_orders())
+    print("My orders, ordered by time:")
+    disp(ana.my_orders(order_by='time'))
 
+    print("My customers, ordered by COUNT(custID) descending:")
+    disp(ana.my_customers(order_by='COUNT(custID)', asc=False))
+
+    print("Rating counts, descending from 10 to 0:")
+    disp(ana.rating_counts(asc=False))
+
+    print("Yearly sales trend:")
+    disp(ana.sales_trend(timespan='yearly'))
 
