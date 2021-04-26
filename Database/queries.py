@@ -30,7 +30,7 @@ class SellerAnalytics:
         :param db_cfg: config dict of the database
         """
         self._cnx = get_cnx(db_cfg)
-        self._cursor = self._cnx.cursor()
+        self._cursor = self._cnx.cursor(dictionary=True)  # Hopefully this will make cursor return a dict
         self._seller_id = seller_id
 
     def login(self, seller_id):
@@ -43,14 +43,14 @@ class SellerAnalytics:
     def my_selling_items(self, order_by='itemID', asc=False):
         """
         Get all items sold by this seller,
-        ordered by some attributes in {'itemID', 'type', 'stock', 'quantity' (sales)}
+        ordered by some attributes in {'itemID', 'type', 'stock', 'SUM(quantity)' (sales)}
 
-        :param order_by: one of {'itemID', 'type', 'stock', 'status', 'quantity'}
+        :param order_by: one of {'itemID', 'type', 'stock', 'status', 'SUM(quantity)'}
         :param asc: Whether order is ascending
         :return: [(itemID, type, description, stock, quantity)]
         """
-        assert order_by in ('itemID', 'type', 'stock', 'quantity'), \
-            "can only order by one of {'itemID', 'type', 'stock', 'quantity'}!"
+        assert order_by in ('itemID', 'type', 'stock', 'SUM(quantity)'), \
+            "can only order by one of {'itemID', 'type', 'stock', 'SUM(quantity)'}!"
 
         self._cursor.execute(
             "SELECT items.itemID, type, description, stock, SUM(quantity) "
@@ -61,7 +61,7 @@ class SellerAnalytics:
             "       RIGHT OUTER JOIN items USING (itemID)"
             f"WHERE sellerID = {self.seller_id} "
             "GROUP BY items.itemID "
-            f"ORDER BY {order_by};"
+            f"ORDER BY {order_by} {'ASC' if asc else 'DESC'};"
         )
         return self._cursor.fetchall()
 
@@ -125,11 +125,10 @@ class SellerAnalytics:
     # def
 
 
-
 if __name__ == '__main__':
     cfg = {
         'user': 'root',
-        'password': '1234',
+        'password': '2333',
         'database': 'csc3170'
     }
 
@@ -141,13 +140,13 @@ if __name__ == '__main__':
     print("My selling items, ordered by stock, ascending:")
     disp(ana.my_selling_items(order_by='stock', asc=True))
 
-    print("My selling items, ordered by sales (quantity):")
-    disp(ana.my_selling_items(order_by='quantity', asc=False))
+    print("My selling items, ordered by SUM(quantity), descending    (sales):")
+    disp(ana.my_selling_items(order_by='SUM(quantity)', asc=False))
 
     print("Item whose description contains '3935':")
     disp(ana.item_info(item="3935"))
 
-    print("My orders:")
+    print("My orders, ordered by order_id:")
     disp(ana.my_orders())
 
 
