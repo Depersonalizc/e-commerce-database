@@ -219,7 +219,6 @@ class SellerAnalytics:
         return self._cursor.fetchall()
 
 
-
 class CustomerAnalytics:
     """
     Buyer-end Analytics of the e-commerce database
