@@ -1,6 +1,6 @@
 import mysql.connector
 from mysql.connector import errorcode
-
+from typing import Union
 
 def get_cnx(config):
     """
@@ -22,7 +22,7 @@ def get_cnx(config):
 
 class SellerAnalytics:
     """
-    Analytics class of the e-commerce database
+    Seller-end Analytics of the e-commerce database
     containing useful querying methods.
     """
     def __init__(self, cnx, seller_id=None):
@@ -43,7 +43,7 @@ class SellerAnalytics:
 
     def my_selling_items(self, order_by='itemID', asc=False):
         """
-        Get all items sold by this seller,
+        Get all items currently sold by this seller,
         ordered by some attributes in {'itemID', 'type', 'stock', 'SUM(quantity)', AVG(rating)}
         :param order_by: one of {'itemID', 'type', 'stock', 'status', 'SUM(quantity), AVG(rating)'}
         :param asc: Whether order is ascending
@@ -65,9 +65,7 @@ class SellerAnalytics:
         )
         return self._cursor.fetchall()
 
-    # def my_selling_items_analytics(self):
-
-    def item_info(self, item, order_by='itemID', asc=False):
+    def item_info(self, item: Union[int, str], order_by='itemID', asc=False):
         """
         Get related info about an item specified by item ID or description.
         :param item: ID or description of the item.
@@ -123,7 +121,7 @@ class SellerAnalytics:
     def my_customers(self, order_by='custID', asc=False):
         """
         Get info of all customers of the seller.
-                                                                    number of orders
+                                                                 [number of orders made]
         :param order_by: one of {'custID', 'cust_name', 'cust_age', 'COUNT(custID)'}
         :param asc: Whether order is ascending.
         :return: [{'custID', 'cust_name', 'cust_age', 'COUNT(custID)'}]
@@ -178,6 +176,112 @@ class SellerAnalytics:
         return self._cursor.fetchall()
 
 
+class CustomerAnalytics:
+    """
+    Buyer-end Analytics of the e-commerce database
+    containing useful querying methods.
+    """
+    def __init__(self, cnx, cust_id=None):
+        """
+        :param cnx: MySQLConnection object returned by get_cnx()
+        :param cust_id: ID of customer
+        """
+        self._cnx = cnx
+        self._cursor = self._cnx.cursor(dictionary=True)  # Hopefully this will make cursor return a dict
+        self._cust_id = cust_id
+
+    @property
+    def cust_id(self):
+        return self._cust_id
+
+    def login(self, cust_id):
+        self._cust_id = cust_id
+
+    def my_orders(self, order_by='orderID', asc=False):
+        """
+        Get info of all orders of the buyer.
+        :param order_by: one of {'orderID', 'sellerID', 'time', 'status'}
+        :param asc: Whether order is ascending
+        :return: [
+                   {
+                   orderID, itemID, description, quantity,
+                   sellerID, time, address, status
+                   }
+                ]
+        """
+
+        options = {'orderID', 'sellerID', 'time', 'status'}
+        assert order_by in options, f"can only order by one of {options}!"
+
+        self._cursor.execute(
+            "SELECT orders.orderID, sellerID, itemID, quantity, time, address, status "
+            "FROM orders JOIN order_item USING (orderID) "
+            f"WHERE orders.custID = {self.cust_id} "
+            "GROUP BY orders.orderID "
+            f"ORDER BY {order_by} {'ASC' if asc else 'DESC'};"
+        )
+        return self._cursor.fetchall()
+
+    def search_item(self, description: str, order_by='SUM(quantity)', asc=False):
+        """
+        Returns all items who description string is contained in `description`
+        :param description: description of the item to search
+        :param order_by: one of {'itemID', 'type', 'description', 'sellerID', 'SUM(quantity)' [sales], 'AVG(rating)'}.
+        :param asc: Whether order is ascending
+        :return : [{itemID, type, description, sellerID, SUM(quantity), AVG(rating)}]
+        """
+        options = {'itemID', 'type', 'description', 'sellerID', 'SUM(quantity)', 'AVG(rating)'}
+        assert order_by in options, f"can only order by one of {options}!"
+
+        self._cursor.execute(
+            "SELECT items.itemID, type, description, sellerID, SUM(quantity), AVG(rating) "
+            "   FROM (SELECT itemID, quantity, rating "
+            f"       FROM (SELECT orderID FROM orders) oid "
+            "           NATURAL JOIN order_item"
+            "         ) odit "
+            "       RIGHT OUTER JOIN items USING (itemID)"
+            f"WHERE description like '%{description}%' "
+            "GROUP BY items.itemID "
+            f"ORDER BY {order_by} {'ASC' if asc else 'DESC'};"
+        )
+        return self._cursor.fetchall()
+
+    def search_seller(self, seller: Union[int, str], order_by='SUM(quantity)', asc=False):
+        """
+        Returns all sellers whose name string is contained in `seller`, or directly by sellerID.
+        :param seller: either seller's ID or name
+        :param order_by: one of {'sellerID', 'seller_name', 'description', 'sellerID',
+                                 'COUNT(DISTINCT orderID)' [number of orders], 'AVG(rating)'}.
+        TODO: order by major types?
+        :param asc: Whether order is ascending
+        :return : [{sellerID, seller_name, COUNT(DISTINCT orderID), AVG(rating)}]
+        """
+        options = {'itemID', 'type', 'description', 'sellerID',
+                   'COUNT(DISTINCT orderID)', 'AVG(rating)'}
+        assert order_by in options, f"can only order by one of {options}!"
+
+        if isinstance(seller, int):
+            self._cursor.execute(
+                "SELECT sellerID, seller_name, COUNT(DISTINCT orderID), AVG(rating) "
+                "FROM (SELECT * FROM sellers WHERE sellerID = 1) s "
+                "LEFT OUTER JOIN (SELECT orderID, sellerID FROM orders) o "
+                "NATURAL JOIN order_item "
+                "USING (sellerID);"
+            )
+
+        elif isinstance(seller, str):
+            self._cursor.execute(
+                "SELECT sellerID, seller_name, COUNT(DISTINCT orderID), AVG(rating) "
+                f"FROM (SELECT * FROM sellers WHERE seller_name like '%{seller}%') s "
+                "LEFT OUTER JOIN (SELECT orderID, sellerID FROM orders) o "
+                "USING (sellerID) "
+                "NATURAL JOIN order_item oi "
+                "GROUP BY sellerID "
+                f"ORDER BY {order_by} {'ASC' if asc else 'DESC'};"
+            )
+
+        return self._cursor.fetchall()
+
 
 
 
@@ -185,40 +289,54 @@ class SellerAnalytics:
 
 if __name__ == '__main__':
 
+    def disp(result):
+        print('\n'.join(str(tup) for tup in result))
+        print()
+
     cfg = {
         'user': 'root',
         'password': '2333',
         'database': 'csc3170'
     }
     cnx = get_cnx(cfg)
+    seller = SellerAnalytics(cnx, seller_id=1)
+    customer = CustomerAnalytics(cnx, cust_id=1)
 
-    ana = SellerAnalytics(cnx, seller_id=1)
-
-    def disp(result):
-        print('\n'.join(str(tup) for tup in result))
-        print()
+    # SELLER-END ANALYTICS
+    print('------------SELLER-END ANALYTICS------------')
 
     print("My selling items, ordered by stock, ascending:")
-    disp(ana.my_selling_items(order_by='stock', asc=True))
+    disp(seller.my_selling_items(order_by='stock', asc=True))
 
     print("My selling items, ordered by SUM(quantity), descending    (sales):")
-    disp(ana.my_selling_items(order_by='SUM(quantity)', asc=False))
+    disp(seller.my_selling_items(order_by='SUM(quantity)', asc=False))
 
     print("My selling items, ordered by AVG(rating), ascending:")
-    disp(ana.my_selling_items(order_by='AVG(rating)', asc=True))
+    disp(seller.my_selling_items(order_by='AVG(rating)', asc=True))
 
     print("Item whose description contains '3935':")
-    disp(ana.item_info(item="3935"))
+    disp(seller.item_info(item="3935"))
 
     print("My orders, ordered by time:")
-    disp(ana.my_orders(order_by='time'))
+    disp(seller.my_orders(order_by='time'))
 
     print("My customers, ordered by COUNT(custID) descending:")
-    disp(ana.my_customers(order_by='COUNT(custID)', asc=False))
+    disp(seller.my_customers(order_by='COUNT(custID)', asc=False))
 
     print("Rating counts, descending from 10 to 0:")
-    disp(ana.rating_counts(asc=False))
+    disp(seller.rating_counts(asc=False))
 
     print("Yearly sales trend:")
-    disp(ana.sales_trend(timespan='yearly'))
+    disp(seller.sales_trend(timespan='yearly'))
 
+    # CUSTOMER-END ANALYTICS
+    print('------------CUSTOMER-END ANALYTICS------------')
+
+    print("My orders, ordered by time:")
+    disp(customer.my_orders(order_by='time', asc=True))
+
+    print("All items whose description contain '23', ordered by sales:")
+    disp(customer.search_item(description='23', order_by='SUM(quantity)', asc=False))
+
+    print("All sellers whose name contains '19', ordered by average rating:")
+    disp(customer.search_seller(seller='19', order_by='AVG(rating)', asc=False))
