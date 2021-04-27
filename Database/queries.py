@@ -175,6 +175,29 @@ class SellerAnalytics:
         )
         return self._cursor.fetchall()
 
+    def competing_sellers(self, type='Food', k=2, order_by='COUNT(DISTINCT orderID)'):
+        """
+        Get info about top k competing sellers ordered by sales or rating.
+        :param order_by: one of {'COUNT(DISTINCT orderID)', 'AVG(rating)'}.
+        """
+        options = {'COUNT(DISTINCT orderID)', 'AVG(rating)'}
+        assert order_by in options, f"can only order by one of {options}!"
+
+        self._cursor.execute(
+            f"SELECT sellerID, seller_name, {order_by} "
+            "FROM(SELECT orderID, sellerID FROM orders) o "
+            "NATURAL JOIN sellers "
+            "NATURAL JOIN(SELECT orderID, itemID, rating FROM order_item) oi "
+            f"NATURAL JOIN(SELECT itemID, type FROM items WHERE type = '{type}') it "
+            f"WHERE sellerID != {self.seller_id} "
+            "GROUP BY sellerID "
+            f"ORDER BY {order_by} DESC LIMIT {k};"
+        )
+        return self._cursor.fetchall()
+
+
+
+
 
 class CustomerAnalytics:
     """
@@ -285,8 +308,6 @@ class CustomerAnalytics:
 
 
 
-
-
 if __name__ == '__main__':
 
     def disp(result):
@@ -295,7 +316,7 @@ if __name__ == '__main__':
 
     cfg = {
         'user': 'root',
-        'password': '2333',
+        'password': '1234',
         'database': 'csc3170'
     }
     cnx = get_cnx(cfg)
@@ -326,6 +347,9 @@ if __name__ == '__main__':
     print("Rating counts, descending from 10 to 0:")
     disp(seller.rating_counts(asc=False))
 
+    print("Top 2 competing sellers of type 'Food' with highest number of orders:")
+    disp(seller.competing_sellers(type='Food', k=2, order_by='COUNT(DISTINCT orderID)'))
+
     print("Yearly sales trend:")
     disp(seller.sales_trend(timespan='yearly'))
 
@@ -335,8 +359,8 @@ if __name__ == '__main__':
     print("My orders, ordered by time:")
     disp(customer.my_orders(order_by='time', asc=True))
 
-    print("All items whose description contain '23', ordered by sales:")
-    disp(customer.search_item(description='23', order_by='SUM(quantity)', asc=False))
+    print("All items whose description contain 'a', ordered by sales:")
+    disp(customer.search_item(description='ab', order_by='SUM(quantity)', asc=False))
 
-    print("All sellers whose name contains '19', ordered by average rating:")
-    disp(customer.search_seller(seller='19', order_by='AVG(rating)', asc=False))
+    print("All sellers whose name contains 'Bab', ordered by average rating:")
+    disp(customer.search_seller(seller='Bab', order_by='AVG(rating)', asc=False))
