@@ -20,17 +20,17 @@ def get_cnx(config):
         return cnx
 
 
-
 class SellerAnalytics:
     """
     Analytics class of the e-commerce database
     containing useful querying methods.
     """
-    def __init__(self, db_cfg, seller_id):
+    def __init__(self, cnx, seller_id=None):
         """
-        :param db_cfg: config dict of the database
+        :param cnx: MySQLConnection object returned by get_cnx()
+        :param seller_id: ID of seller
         """
-        self._cnx = get_cnx(db_cfg)
+        self._cnx = cnx
         self._cursor = self._cnx.cursor(dictionary=True)  # Hopefully this will make cursor return a dict
         self._seller_id = seller_id
 
@@ -190,8 +190,9 @@ if __name__ == '__main__':
         'password': '2333',
         'database': 'csc3170'
     }
+    cnx = get_cnx(cfg)
 
-    ana = SellerAnalytics(cfg, seller_id=1)
+    ana = SellerAnalytics(cnx, seller_id=1)
 
     def disp(result):
         print('\n'.join(str(tup) for tup in result))
