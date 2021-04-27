@@ -2,9 +2,9 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="bade8adf-8e5b-4bfb-a486-50a5a74770dc" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Database/queries.py" beforeDir="false" afterPath="$PROJECT_DIR$/Database/queries.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Database/test_db.sql" beforeDir="false" afterPath="$PROJECT_DIR$/Database/test_db.sql" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Database/test_db1.sql" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Database/test_db2.sql" beforeDir="false" afterPath="$PROJECT_DIR$/Database/test_db2.sql" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -39,8 +39,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/Database/queries.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="155">
-              <caret line="351" lean-forward="true" selection-start-line="351" selection-end-line="351" />
+            <state relative-caret-position="976">
+              <caret line="376" column="53" selection-start-line="376" selection-start-column="53" selection-end-line="376" selection-end-column="53" />
               <folding>
                 <element signature="e#0#22#0" expanded="true" />
               </folding>
@@ -51,8 +51,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/Database/test_db.sql">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="189">
-              <caret line="91" column="29" lean-forward="true" selection-start-line="91" selection-start-column="29" selection-end-line="91" selection-end-column="29" />
+            <state relative-caret-position="-4786">
+              <caret line="218" column="4" lean-forward="true" selection-start-line="218" selection-start-column="4" selection-end-line="218" selection-end-column="4" />
             </state>
           </provider>
         </entry>
@@ -97,6 +97,7 @@
       <find>sell_name</find>
       <find>seller_name</find>
       <find>ID = 1</find>
+      <find>rating_counts</find>
     </findStrings>
     <replaceStrings>
       <replace>');</replace>
@@ -125,13 +126,15 @@
         <option value="$PROJECT_DIR$/Database/data.sql" />
         <option value="$PROJECT_DIR$/Database/数据1(1).sql" />
         <option value="$PROJECT_DIR$/Analytics/queries.py" />
+        <option value="$PROJECT_DIR$/Database/test_db2.sql" />
         <option value="$PROJECT_DIR$/Database/queries.py" />
       </list>
     </option>
   </component>
-  <component name="ProjectFrameBounds" extendedState="1">
+  <component name="ProjectFrameBounds" extendedState="6">
     <option name="x" value="-9" />
-    <option name="width" value="1683" />
+    <option name="y" value="-9" />
+    <option name="width" value="978" />
     <option name="height" value="1048" />
   </component>
   <component name="ProjectId" id="1rjJ3WLzjRQCIOmaaPvcOn34YL8" />
@@ -251,9 +254,8 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="-7" y="-7" width="1550" height="838" extended-state="6" />
-    <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" sideWeight="0.4978166" visible="true" weight="0.2543624" />
+      <window_info content_ui="combo" id="Project" order="0" sideWeight="0.4978166" visible="true" weight="0.1261745" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" sideWeight="0.5021834" side_tool="true" weight="0.3263889" />
       <window_info id="Project Explorer" order="3" />
@@ -326,17 +328,24 @@
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/Analytics/queries.py" />
+    <entry file="file://$PROJECT_DIR$/Database/test_db2.sql">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="91">
+          <caret line="114" column="28" lean-forward="true" selection-start-line="114" selection-start-column="28" selection-end-line="114" selection-end-column="28" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/Database/test_db.sql">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="189">
-          <caret line="91" column="29" lean-forward="true" selection-start-line="91" selection-start-column="29" selection-end-line="91" selection-end-column="29" />
+        <state relative-caret-position="-4786">
+          <caret line="218" column="4" lean-forward="true" selection-start-line="218" selection-start-column="4" selection-end-line="218" selection-end-column="4" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/Database/queries.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="155">
-          <caret line="351" lean-forward="true" selection-start-line="351" selection-end-line="351" />
+        <state relative-caret-position="976">
+          <caret line="376" column="53" selection-start-line="376" selection-start-column="53" selection-end-line="376" selection-end-column="53" />
           <folding>
             <element signature="e#0#22#0" expanded="true" />
           </folding>

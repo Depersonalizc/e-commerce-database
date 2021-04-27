@@ -2,6 +2,7 @@ import mysql.connector
 from mysql.connector import errorcode
 from typing import Union
 
+
 def get_cnx(config):
     """
     Create connection to the MySQL server, return a MySQLConnection object.
@@ -41,7 +42,7 @@ class SellerAnalytics:
     def login(self, seller_id):
         self._seller_id = seller_id
 
-    def my_selling_items(self, order_by='itemID', asc=False):
+    def my_selling_items(self, description='', order_by='itemID', asc=False):
         """
         Get all items currently sold by this seller,
         ordered by some attributes in {'itemID', 'type', 'stock', 'SUM(quantity)', AVG(rating)}
@@ -59,7 +60,7 @@ class SellerAnalytics:
             "           NATURAL JOIN order_item"
             "         ) odit "
             "       RIGHT OUTER JOIN items USING (itemID)"
-            f"WHERE sellerID = {self.seller_id} "
+            f"WHERE sellerID = {self.seller_id} AND description LIKE '%{description}%'"
             "GROUP BY items.itemID "
             f"ORDER BY {order_by} {'ASC' if asc else 'DESC'};"
         )
@@ -169,7 +170,7 @@ class SellerAnalytics:
 
         self._cursor.execute(
             "SELECT time, COUNT(orderID) "
-            "FROM orders WHERE sellerID = 1 "
+            f"FROM orders WHERE sellerID = {self.seller_id} "
             f"GROUP BY UNIX_TIMESTAMP(time) DIV {seconds[timespan]} "
             "ORDER BY time;"
         )
@@ -195,7 +196,27 @@ class SellerAnalytics:
         )
         return self._cursor.fetchall()
 
+    def customer_distribution(self, group_by='cust_gender'):
+        options = {'cust_gender', 'address'}
+        assert group_by in options, f"can only order by one of {options}!"
 
+        self._cursor.execute(
+            f"""
+            SELECT
+            {group_by}, COUNT(DISTINCT custID) FROM
+            customers as c
+            NATURAL
+            JOIN
+            orders
+            WHERE
+            sellerID = {self.seller_id}
+            GROUP
+            BY
+            {group_by}
+            """
+        )
+
+        return self._cursor.fetchall()
 
 
 
@@ -320,47 +341,49 @@ if __name__ == '__main__':
         'database': 'csc3170'
     }
     cnx = get_cnx(cfg)
-    seller = SellerAnalytics(cnx, seller_id=1)
+    seller = SellerAnalytics(cnx, seller_id=7)
     customer = CustomerAnalytics(cnx, cust_id=1)
 
     # SELLER-END ANALYTICS
     print('------------SELLER-END ANALYTICS------------')
 
-    print("My selling items, ordered by stock, ascending:")
-    disp(seller.my_selling_items(order_by='stock', asc=True))
+    # print("My selling items containing letter 'th', ordered by stock, ascending:")
+    # disp(seller.my_selling_items(description='th', order_by='stock', asc=True))
+    #
+    # print("My selling items, ordered by SUM(quantity), descending    (sales):")
+    # disp(seller.my_selling_items(order_by='SUM(quantity)', asc=False))
+    #
+    # print("My selling items, ordered by AVG(rating), ascending:")
+    # disp(seller.my_selling_items(order_by='AVG(rating)', asc=True))
+    #
+    # print("Item whose description contains '3935':")
+    # disp(seller.item_info(item="3935"))
+    #
+    # print("My orders, ordered by time:")
+    # disp(seller.my_orders(order_by='time'))
+    #
+    # print("My customers, ordered by COUNT(custID) descending:")
+    # disp(seller.my_customers(order_by='COUNT(custID)', asc=False))
+    #
+    # print("Rating counts, descending from 10 to 0:")
+    # disp(seller.rating_counts(asc=False))
+    #
+    # print("Top 2 competing sellers of type 'Food' with highest number of orders:")
+    # disp(seller.competing_sellers(type='Food', k=2, order_by='COUNT(DISTINCT orderID)'))
+    #
+    # print("Monthly sales trend:")
+    # disp(seller.sales_trend(timespan='monthly'))
+    disp(seller.customer_distribution(group_by='address'))
+    #
+    # # CUSTOMER-END ANALYTICS
+    # print('------------CUSTOMER-END ANALYTICS------------')
+    #
+    # print("My orders, ordered by time:")
+    # disp(customer.my_orders(order_by='time', asc=True))
+    #
+    # print("All items whose description contain 'a', ordered by sales:")
+    # disp(customer.search_item(description='ab', order_by='SUM(quantity)', asc=False))
+    #
+    # print("All sellers whose name contains 'Bab', ordered by average rating:")
+    # disp(customer.search_seller(seller='Bab', order_by='AVG(rating)', asc=False))
 
-    print("My selling items, ordered by SUM(quantity), descending    (sales):")
-    disp(seller.my_selling_items(order_by='SUM(quantity)', asc=False))
-
-    print("My selling items, ordered by AVG(rating), ascending:")
-    disp(seller.my_selling_items(order_by='AVG(rating)', asc=True))
-
-    print("Item whose description contains '3935':")
-    disp(seller.item_info(item="3935"))
-
-    print("My orders, ordered by time:")
-    disp(seller.my_orders(order_by='time'))
-
-    print("My customers, ordered by COUNT(custID) descending:")
-    disp(seller.my_customers(order_by='COUNT(custID)', asc=False))
-
-    print("Rating counts, descending from 10 to 0:")
-    disp(seller.rating_counts(asc=False))
-
-    print("Top 2 competing sellers of type 'Food' with highest number of orders:")
-    disp(seller.competing_sellers(type='Food', k=2, order_by='COUNT(DISTINCT orderID)'))
-
-    print("Yearly sales trend:")
-    disp(seller.sales_trend(timespan='yearly'))
-
-    # CUSTOMER-END ANALYTICS
-    print('------------CUSTOMER-END ANALYTICS------------')
-
-    print("My orders, ordered by time:")
-    disp(customer.my_orders(order_by='time', asc=True))
-
-    print("All items whose description contain 'a', ordered by sales:")
-    disp(customer.search_item(description='ab', order_by='SUM(quantity)', asc=False))
-
-    print("All sellers whose name contains 'Bab', ordered by average rating:")
-    disp(customer.search_seller(seller='Bab', order_by='AVG(rating)', asc=False))
