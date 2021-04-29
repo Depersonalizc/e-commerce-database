@@ -1,4 +1,4 @@
-CREATE TABLE `csc3170_2`.`orders` (
+CREATE TABLE `csc3170`.`orders` (
   `orderID` INT NOT NULL,
   `custID` INT NOT NULL,
   `sellerID` INT NOT NULL,
@@ -7,14 +7,14 @@ CREATE TABLE `csc3170_2`.`orders` (
   `status` INT NULL,
   PRIMARY KEY (`orderID`));
 
-CREATE TABLE `csc3170_2`.`order_item` (
+CREATE TABLE `csc3170`.`order_item` (
   `orderID` INT NOT NULL,
   `itemID` INT NOT NULL,
   `quantity` INT NOT NULL,
   `rating` INT NOT NULL,
   PRIMARY KEY (`orderID`, `itemID`));
 
-CREATE TABLE `csc3170_2`.`items` (
+CREATE TABLE `csc3170`.`items` (
   `itemID` INT NOT NULL,
   `sellerID` INT NOT NULL,
   `type` VARCHAR(50) NOT NULL,
@@ -22,19 +22,19 @@ CREATE TABLE `csc3170_2`.`items` (
   `stock` INT NOT NULL,
   PRIMARY KEY (`itemID`));
 
-CREATE TABLE `csc3170_2`.`sellers` (
+CREATE TABLE `csc3170`.`sellers` (
   `sellerID` INT NOT NULL,
   `seller_name` VARCHAR(50) NOT NULL,
   PRIMARY KEY (`sellerID`));
 
-CREATE TABLE `csc3170_2`.`customers` (
+CREATE TABLE `csc3170`.`customers` (
   `custID` INT NOT NULL,
   `cust_name` VARCHAR(50) NOT NULL,
   `cust_gender` VARCHAR(6) NOT NULL,
   `cust_age` INT NOT NULL,
   PRIMARY KEY (`custID`));
 
-CREATE TABLE `csc3170_2`.`addresses` (
+CREATE TABLE `csc3170`.`addresses` (
   `custID` INT NOT NULL,
   `address` VARCHAR(200) NOT NULL,
   PRIMARY KEY (`custID`, `address`));
@@ -49,56 +49,66 @@ insert into addresses(custID,address) values('7','Hebei');
 insert into addresses(custID,address) values('8','Shanghai');
 insert into addresses(custID,address) values('9','Jiangsu');
 insert into addresses(custID,address) values('10','Henan');
+insert into customers(custID,cust_name,cust_gender,cust_age) values('1','Abia','male','21');
+insert into customers(custID,cust_name,cust_gender,cust_age) values('2','Brewster','female','34');
+insert into customers(custID,cust_name,cust_gender,cust_age) values('3','Bridget','male','56');
+insert into customers(custID,cust_name,cust_gender,cust_age) values('4','Fabian','female','12');
+insert into customers(custID,cust_name,cust_gender,cust_age) values('5','Pack','female','67');
+insert into customers(custID,cust_name,cust_gender,cust_age) values('6','Tabor','male','28');
+insert into customers(custID,cust_name,cust_gender,cust_age) values('7','Halley','female','31');
+insert into customers(custID,cust_name,cust_gender,cust_age) values('8','Eddy','female','44');
+insert into customers(custID,cust_name,cust_gender,cust_age) values('9','Dan','male','52');
+insert into customers(custID,cust_name,cust_gender,cust_age) values('10','Zola','male','25');
 insert into items(itemID,sellerID,type,description,stock) values('1','4','Car','Benz','85');
 insert into items(itemID,sellerID,type,description,stock) values('2','8','Jewelry','diamond','20');
-insert into items(itemID,sellerID,type,description,stock) values('3','7','Home improvement products','Safeguard shower gel','62');
+insert into items(itemID,sellerID,type,description,stock) values('3','7','Home Improvement','detergent','62');
 insert into items(itemID,sellerID,type,description,stock) values('4','5','Car','BMW','57');
 insert into items(itemID,sellerID,type,description,stock) values('5','9','Medicine','cold cure','100');
-insert into items(itemID,sellerID,type,description,stock) values('6','2','Digital appliance','computer','93');
+insert into items(itemID,sellerID,type,description,stock) values('6','2','Digital Appliance','computer','93');
 insert into items(itemID,sellerID,type,description,stock) values('7','10','Food','vegetable','82');
-insert into items(itemID,sellerID,type,description,stock) values('8','7','Food','BESTORE dried pork slices ','81');
-insert into items(itemID,sellerID,type,description,stock) values('9','1','Food','mutton','18');
+insert into items(itemID,sellerID,type,description,stock) values('8','7','Food','pork','81');
+insert into items(itemID,sellerID,type,description,stock) values('9','1','Food','Xinjiang mutton','18');
 insert into items(itemID,sellerID,type,description,stock) values('10','10','Food','milk','55');
-insert into items(itemID,sellerID,type,description,stock) values('11','8','Digital appliance','heatset','32');
+insert into items(itemID,sellerID,type,description,stock) values('11','8','Digital Appliance','heatset','32');
 insert into items(itemID,sellerID,type,description,stock) values('12','3','Wear','shirt','36');
-insert into items(itemID,sellerID,type,description,stock) values('13','9','Home improvement products','laundry detergent','32');
+insert into items(itemID,sellerID,type,description,stock) values('13','9','Home Improvement','laundry detergent','32');
 insert into items(itemID,sellerID,type,description,stock) values('14','6','Jewelry','gold','90');
-insert into items(itemID,sellerID,type,description,stock) values('15','4','Digital appliance','camera','40');
+insert into items(itemID,sellerID,type,description,stock) values('15','4','Digital Appliance','camera','40');
 insert into items(itemID,sellerID,type,description,stock) values('16','10','Car','VW','64');
 insert into items(itemID,sellerID,type,description,stock) values('17','3','Packaging','hop-pocket','71');
-insert into items(itemID,sellerID,type,description,stock) values('18','2','Articles of luxury','PRADA','46');
-insert into items(itemID,sellerID,type,description,stock) values('19','7','Food','BE&CHEERY snacks','20');
-insert into items(itemID,sellerID,type,description,stock) values('20','2','Food','coffee','48');
-insert into items(itemID,sellerID,type,description,stock) values('21','7','Food','Lapsang souchong','38');
+insert into items(itemID,sellerID,type,description,stock) values('18','2','Luxury','PRADA','46');
+insert into items(itemID,sellerID,type,description,stock) values('19','7','Food','YUMMY cookie','20');
+insert into items(itemID,sellerID,type,description,stock) values('20','2','Food','tea','48');
+insert into items(itemID,sellerID,type,description,stock) values('21','7','Food','Symposium coffee','38');
 insert into items(itemID,sellerID,type,description,stock) values('22','10','Medicine','digestive','72');
 insert into items(itemID,sellerID,type,description,stock) values('23','6','Car','BYD','17');
 insert into items(itemID,sellerID,type,description,stock) values('24','9','Medicine','hypotensor','92');
-insert into items(itemID,sellerID,type,description,stock) values('25','1','Mother and baby products','baby diapers','62');
-insert into items(itemID,sellerID,type,description,stock) values('26','4','Home improvement products','wallpaper','45');
-insert into items(itemID,sellerID,type,description,stock) values('27','8','Mother and baby products','milk powder','29');
+insert into items(itemID,sellerID,type,description,stock) values('25','1','Mother & Baby','baby diapers','62');
+insert into items(itemID,sellerID,type,description,stock) values('26','4','Home Improvement','wallpaper','45');
+insert into items(itemID,sellerID,type,description,stock) values('27','8','Mother & Baby','milk powder','29');
 insert into items(itemID,sellerID,type,description,stock) values('28','8','Food','instant food','17');
 insert into items(itemID,sellerID,type,description,stock) values('29','6','Phone','Iphone','33');
 insert into items(itemID,sellerID,type,description,stock) values('30','4','Jewelry','ring','20');
-insert into items(itemID,sellerID,type,description,stock) values('31','9','Articles of luxury','VALENTINO','68');
-insert into items(itemID,sellerID,type,description,stock) values('32','5','Home improvement products','light','24');
+insert into items(itemID,sellerID,type,description,stock) values('31','9','Luxury','VALENTINO','68');
+insert into items(itemID,sellerID,type,description,stock) values('32','5','Home Improvement','light','24');
 insert into items(itemID,sellerID,type,description,stock) values('33','3','Food','chocolate','30');
 insert into items(itemID,sellerID,type,description,stock) values('34','6','Food','candies','67');
-insert into items(itemID,sellerID,type,description,stock) values('35','7','Phone','MIUI','90');
-insert into items(itemID,sellerID,type,description,stock) values('36','7','Food','NongFu Spring','34');
+insert into items(itemID,sellerID,type,description,stock) values('35','7','Phone','RedMI','90');
+insert into items(itemID,sellerID,type,description,stock) values('36','7','Food','Ganten mineral water','34');
 insert into items(itemID,sellerID,type,description,stock) values('37','9','Food','wine','31');
 insert into items(itemID,sellerID,type,description,stock) values('38','2','Food','rice noodles','72');
 insert into items(itemID,sellerID,type,description,stock) values('39','8','Car','Ford','94');
-insert into items(itemID,sellerID,type,description,stock) values('40','10','Mother and baby products','children toys','81');
+insert into items(itemID,sellerID,type,description,stock) values('40','10','Mother & Baby','children toys','81');
 insert into items(itemID,sellerID,type,description,stock) values('41','6','Jewelry','necklace','65');
-insert into items(itemID,sellerID,type,description,stock) values('42','7','Jewelry','DW bracelet','57');
-insert into items(itemID,sellerID,type,description,stock) values('43','8','Articles of luxury','BALENGIAGA','87');
-insert into items(itemID,sellerID,type,description,stock) values('44','7','Wear','playboy pants','91');
-insert into items(itemID,sellerID,type,description,stock) values('45','8','Home improvement products','bed','17');
+insert into items(itemID,sellerID,type,description,stock) values('42','7','Jewelry','bracelet','57');
+insert into items(itemID,sellerID,type,description,stock) values('43','8','Luxury','BALENGIAGA','87');
+insert into items(itemID,sellerID,type,description,stock) values('44','7','Wear','pants','91');
+insert into items(itemID,sellerID,type,description,stock) values('45','8','Home Improvement','bed','17');
 insert into items(itemID,sellerID,type,description,stock) values('46','5','Packaging','bag','27');
-insert into items(itemID,sellerID,type,description,stock) values('47','10','Digital appliance','xbox','92');
-insert into items(itemID,sellerID,type,description,stock) values('48','6','Mother and baby products','feeder','18');
-insert into items(itemID,sellerID,type,description,stock) values('49','7','Food','Oreo cookie','60');
-insert into items(itemID,sellerID,type,description,stock) values('50','1','Phone','SAMSUNG','14');
+insert into items(itemID,sellerID,type,description,stock) values('47','10','Digital Appliance','xbox','92');
+insert into items(itemID,sellerID,type,description,stock) values('48','6','Mother & Baby','feeder','18');
+insert into items(itemID,sellerID,type,description,stock) values('49','7','Food','cookie','60');
+insert into items(itemID,sellerID,type,description,stock) values('50','1','Phone','SAMSUNG S4','14');
 insert into orders(orderID,custID,sellerID,time,address,status) values('1','2','1','20140423','Guangdong','1');
 insert into orders(orderID,custID,sellerID,time,address,status) values('2','8','2','20140428','Shanghai','1');
 insert into orders(orderID,custID,sellerID,time,address,status) values('3','3','1','20120923','Guangdong','0');

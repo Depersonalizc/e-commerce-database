@@ -2,8 +2,15 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="bade8adf-8e5b-4bfb-a486-50a5a74770dc" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/codeStyles/Project.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/codeStyles/Project.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Database/queries.py" beforeDir="false" afterPath="$PROJECT_DIR$/Database/queries.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Database/test_db2.sql" beforeDir="false" afterPath="$PROJECT_DIR$/Database/test_db2.sql" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Interface/ui.py" beforeDir="false" afterPath="$PROJECT_DIR$/Interface/ui.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Interface/ui_1.py" beforeDir="false" afterPath="$PROJECT_DIR$/Interface/ui_1.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/group_presentation.pptx" beforeDir="false" afterPath="$PROJECT_DIR$/group_presentation.pptx" afterDir="false" />
     </list>
+    <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -17,28 +24,41 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/Database/db.sql">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1543">
-              <caret line="4252" column="42" selection-start-line="4252" selection-start-column="42" selection-end-line="4252" selection-end-column="42" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/Interface/ui.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-729">
-              <folding>
-                <element signature="e#0#33#0" expanded="true" />
-              </folding>
+            <state relative-caret-position="113967">
+              <caret line="4221" column="19" selection-start-line="4221" selection-start-column="19" selection-end-line="4221" selection-end-column="19" />
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/Interface/ui.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="3105">
+              <caret line="118" column="16" lean-forward="true" selection-start-line="118" selection-start-column="16" selection-end-line="118" selection-end-column="16" />
+              <folding>
+                <element signature="e#0#19#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/Database/queries.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="243">
-              <caret line="96" column="17" selection-start-line="96" selection-start-column="8" selection-end-line="96" selection-end-column="17" />
+            <state relative-caret-position="2511">
+              <caret line="95" selection-start-line="95" selection-end-line="95" />
+              <folding>
+                <element signature="e#0#22#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/Interface/queries.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="2997">
+              <caret line="113" column="55" selection-start-line="113" selection-start-column="55" selection-end-line="113" selection-end-column="55" />
               <folding>
                 <element signature="e#0#22#0" expanded="true" />
               </folding>
@@ -49,8 +69,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/Database/test_db2.sql">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-692">
-              <caret line="73" column="49" selection-start-line="73" selection-start-column="49" selection-end-line="73" selection-end-column="49" />
+            <state relative-caret-position="1836">
+              <caret line="68" column="27" selection-start-line="68" selection-start-column="27" selection-end-line="68" selection-end-column="27" />
             </state>
           </provider>
         </entry>
@@ -58,7 +78,7 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/Interface/ui_1.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-162">
+            <state>
               <folding>
                 <element signature="e#0#33#0" expanded="true" />
               </folding>
@@ -98,6 +118,12 @@
       <find>rating_counts</find>
       <find>sales_tr</find>
       <find>customers</find>
+      <find>my_orders</find>
+      <find>refresh_table</find>
+      <find>refresh_table_order</find>
+      <find>Home</find>
+      <find>csc3170_2</find>
+      <find>pork</find>
     </findStrings>
     <replaceStrings>
       <replace>');</replace>
@@ -106,6 +132,8 @@
       <replace>itemID</replace>
       <replace>seller_name</replace>
       <replace>, '5');</replace>
+      <replace>csc3170</replace>
+      <replace>Digital Appliance</replace>
     </replaceStrings>
   </component>
   <component name="Git.Settings">
@@ -126,16 +154,18 @@
         <option value="$PROJECT_DIR$/Database/data.sql" />
         <option value="$PROJECT_DIR$/Database/数据1(1).sql" />
         <option value="$PROJECT_DIR$/Analytics/queries.py" />
-        <option value="$PROJECT_DIR$/Database/test_db2.sql" />
         <option value="$PROJECT_DIR$/Database/queries.py" />
+        <option value="$PROJECT_DIR$/Interface/queries.py" />
+        <option value="$PROJECT_DIR$/Database/test_db2.sql" />
+        <option value="$PROJECT_DIR$/Interface/ui.py" />
       </list>
     </option>
   </component>
-  <component name="ProjectFrameBounds" extendedState="6">
-    <option name="x" value="371" />
-    <option name="y" value="-34" />
-    <option name="width" value="1044" />
-    <option name="height" value="1039" />
+  <component name="ProjectFrameBounds">
+    <option name="x" value="23" />
+    <option name="y" value="377" />
+    <option name="width" value="1045" />
+    <option name="height" value="1040" />
   </component>
   <component name="ProjectId" id="1rjJ3WLzjRQCIOmaaPvcOn34YL8" />
   <component name="ProjectView">
@@ -143,7 +173,6 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -165,6 +194,7 @@
           <select />
         </subPane>
       </pane>
+      <pane id="Scope" />
     </panes>
   </component>
   <component name="ProjectViewState">
@@ -253,25 +283,25 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="-7" y="-7" width="1550" height="838" extended-state="6" />
+    <frame x="19" y="302" width="836" height="832" extended-state="0" />
     <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" sideWeight="0.4978166" visible="true" weight="0.1261745" />
-      <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" sideWeight="0.49559084" visible="true" weight="0.24484536" />
+      <window_info id="Structure" order="1" sideWeight="0.5044092" side_tool="true" visible="true" weight="0.24484536" />
       <window_info id="Favorites" order="2" sideWeight="0.5021834" side_tool="true" weight="0.3263889" />
       <window_info id="Project Explorer" order="3" />
       <window_info id="DB Browser" order="4" />
       <window_info id="Job Explorer" order="5" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" />
-      <window_info active="true" anchor="bottom" id="Run" order="2" sideWeight="0.54697984" visible="true" weight="0.09117647" />
+      <window_info anchor="bottom" id="Run" order="2" sideWeight="0.54697984" weight="0.15735294" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="bottom" id="TODO" order="6" />
       <window_info anchor="bottom" id="Version Control" order="7" />
       <window_info anchor="bottom" id="Terminal" order="8" />
-      <window_info anchor="bottom" id="Event Log" order="9" sideWeight="0.45302013" side_tool="true" visible="true" weight="0.09117647" />
+      <window_info anchor="bottom" id="Event Log" order="9" sideWeight="0.45302013" side_tool="true" visible="true" weight="0.15875371" />
       <window_info anchor="bottom" id="Python Console" order="10" />
       <window_info anchor="bottom" id="DB Execution Console" order="11" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
@@ -301,9 +331,54 @@
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/Interface/第一页.PNG" />
+    <entry file="file://$PROJECT_DIR$/Database/data.sql" />
+    <entry file="file://$PROJECT_DIR$/Database/create_table.sql" />
+    <entry file="file://$PROJECT_DIR$/Database/数据1(1).sql" />
+    <entry file="file://$PROJECT_DIR$/Analytics/queries.py" />
+    <entry file="file://$PROJECT_DIR$/Database/test_db.sql">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="194">
+          <caret line="43" column="90" selection-start-line="43" selection-start-column="79" selection-end-line="43" selection-end-column="90" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Database/db.sql">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="113967">
+          <caret line="4221" column="19" selection-start-line="4221" selection-start-column="19" selection-end-line="4221" selection-end-column="19" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Database/queries.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="2511">
+          <caret line="95" selection-start-line="95" selection-end-line="95" />
+          <folding>
+            <element signature="e#0#22#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Interface/queries.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="2997">
+          <caret line="113" column="55" selection-start-line="113" selection-start-column="55" selection-end-line="113" selection-end-column="55" />
+          <folding>
+            <element signature="e#0#22#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Database/test_db2.sql">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1836">
+          <caret line="68" column="27" selection-start-line="68" selection-start-column="27" selection-end-line="68" selection-end-column="27" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/Interface/ui_1.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-162">
+        <state>
           <folding>
             <element signature="e#0#33#0" expanded="true" />
           </folding>
@@ -318,37 +393,12 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Database/data.sql" />
-    <entry file="file://$PROJECT_DIR$/Database/create_table.sql" />
-    <entry file="file://$PROJECT_DIR$/Database/数据1(1).sql" />
-    <entry file="file://$PROJECT_DIR$/Database/db.sql">
+    <entry file="file://$PROJECT_DIR$/Interface/ui.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1543">
-          <caret line="4252" column="42" selection-start-line="4252" selection-start-column="42" selection-end-line="4252" selection-end-column="42" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Analytics/queries.py" />
-    <entry file="file://$PROJECT_DIR$/Database/test_db.sql">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="194">
-          <caret line="43" column="90" selection-start-line="43" selection-start-column="79" selection-end-line="43" selection-end-column="90" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Database/test_db2.sql">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-692">
-          <caret line="73" column="49" selection-start-line="73" selection-start-column="49" selection-end-line="73" selection-end-column="49" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Database/queries.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="243">
-          <caret line="96" column="17" selection-start-line="96" selection-start-column="8" selection-end-line="96" selection-end-column="17" />
+        <state relative-caret-position="3105">
+          <caret line="118" column="16" lean-forward="true" selection-start-line="118" selection-start-column="16" selection-end-line="118" selection-end-column="16" />
           <folding>
-            <element signature="e#0#22#0" expanded="true" />
+            <element signature="e#0#19#0" expanded="true" />
           </folding>
         </state>
       </provider>

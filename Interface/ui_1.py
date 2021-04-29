@@ -5,27 +5,27 @@ from bokeh.models import widgets as wd, ColumnDataSource
 from bokeh.core.properties import value
 from functools import partial
 import string
-import pymssql
+# import pymssql
 
 # 链接数据库用，需要后端提供的服务器地址，名称，账号和密码
-def connectSQLServer():
-    """Connect to SQL server."""
-    attr = dict(
-        server = "10.20.213.10",
-        database = "csc1002",
-        user = "csc1002",
-        password = "csc1002",
-        port = 1433,
-        as_dict = True
-    )
+# def connectSQLServer():
+#     """Connect to SQL server."""
+#     attr = dict(
+#         server = "10.20.213.10",
+#         database = "csc1002",
+#         user = "csc1002",
+#         password = "csc1002",
+#         port = 1433,
+#         as_dict = True
+#     )
 
-    try:
-        return pymssql.connect(**attr)
-    except Exception as e:
-        print(e)
-        quit()
+#     try:
+#         return pymssql.connect(**attr)
+#     except Exception as e:
+#         print(e)
+#         quit()
 
-sqlConn = connectSQLServer()
+# sqlConn = connectSQLServer()
 
 # ------------------------------------Class info------------------------------------
 #以下主要是生成展示用的column和label，后端不用看这部分
@@ -52,21 +52,21 @@ columns =[
 table = wd.DataTable(source = ColumnDataSource(data = data),
     columns = columns, width = 800, height = 280) 
 
-def refresh_table(tsql):
-    """Refresh data table with search result.
-    Keyword arguments:
-    tsql -- SQL string stating how & what to search for.
-    """
-    with sqlConn.cursor(as_dict = True) as cursor:
-        cursor.execute(tsql)
-        rows = cursor.fetchall()
-        data["Order ID"] = [row["orderID"] for row in rows]
-        data["Customer Name"] = [row["cust_name"] for row in rows]
-        data["Seller Name"] = [row["sell_name"] for row in rows]
-        data["Addres"] = [row["address"] for row in rows]
-        data["Timestamp"] = [row["time"] for row in rows]
-        data["Status"] = [row["status"] for row in rows]
-    table.source.data = data
+# def refresh_table(tsql):
+#     """Refresh data table with search result.
+#     Keyword arguments:
+#     tsql -- SQL string stating how & what to search for.
+#     """
+#     with sqlConn.cursor(as_dict = True) as cursor:
+#         cursor.execute(tsql)
+#         rows = cursor.fetchall()
+#         data["Order ID"] = [row["orderID"] for row in rows]
+#         data["Customer Name"] = [row["cust_name"] for row in rows]
+#         data["Seller Name"] = [row["sell_name"] for row in rows]
+#         data["Addres"] = [row["address"] for row in rows]
+#         data["Timestamp"] = [row["time"] for row in rows]
+#         data["Status"] = [row["status"] for row in rows]
+#     table.source.data = data
 # ————————————————————————————— SQL Queries———————————————————————————————
 #搜索用的query，需要后端根据自己的数据结构提供
 

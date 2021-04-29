@@ -15,14 +15,16 @@ from queries import SellerAnalytics, CustomerAnalytics
 from queries import get_cnx
 import string
 
+from datetime import datetime
+
 from bokeh.io import output_file, show
 from collections import Counter
 
 cfg = {
-        'user': 'root',
-        'password': 'aaaaa',
-        'database': 'csc3170_2'
-    }
+    'user': 'root',
+    'password': '1234',
+    'database': 'csc3170'
+}
 
 cnx = get_cnx(cfg)
 customer = CustomerAnalytics(cnx, cust_id=7)
@@ -42,11 +44,11 @@ item_search_button = wd.Button(label="Search", height = 50)
 
 columns_item =[
     wd.TableColumn(field = "Item ID", title = "Item ID"),
+    wd.TableColumn(field = "Description", title = "Description"),
     wd.TableColumn(field = "Item Type", title = "Item Type"),
     wd.TableColumn(field = "Stock", title = "Stock"),
     wd.TableColumn(field = "Sales Volume", title = "Sales Volume"),
     wd.TableColumn(field = "Average Rating", title = "Average Rating"),
-    wd.TableColumn(field = "Description", title = "Description")
 ]
 
 table_item = wd.DataTable(source = ColumnDataSource(data = data),
@@ -112,31 +114,32 @@ def change_acdc(idx):
 def search_item():
     refresh_table_item(rawdata)
     
-Title1 = Div(text = "<b>Item(s) in Stock<b>", style={'font-size': '220%'},default_size = 1200, width=500, height=100)
+Title1 = Div(text = "<b>Items in Stock<b>", style={'font-size': '220%'},default_size = 1200, width=500, height=100)
 
 columns_order =[
     wd.TableColumn(field = "Order ID", title = "Order ID"),
-    wd.TableColumn(field = "Item ID", title = "Item ID"),
-    #wd.TableColumn(field = "Description", title = "Description"),
+    #wd.TableColumn(field = "Item ID", title = "Item ID"),
+    wd.TableColumn(field = "Item", title = "Item"),
     wd.TableColumn(field = "Quantity", title = "Quantity"),
     wd.TableColumn(field = "Customer ID", title = "Customer ID"),
-    wd.TableColumn(field = "Time", title = "Time"),
     wd.TableColumn(field = "Address", title = "Address"),
-    wd.TableColumn(field = "Status", title = "Status")
+    wd.TableColumn(field = "Status", title = "Status"),
+    wd.TableColumn(field="Time", title="Time"),
 ]
 
 table_order= wd.DataTable(source = ColumnDataSource(data = data),
-    columns = columns_order, width = 1200, height = 280) 
+    columns = columns_order, width = 800, height = 280)
 
 def refresh_table_order(rawdata):
+    print(rawdata)
     data["Order ID"] = [row["orderID"] for row  in rawdata]
-    data["Item ID"] = [row["itemID"] for row  in rawdata]
-    #data["Description"] = [row["description"] for row in rawdata]
+    #data["Item ID"] = [row["itemID"] for row  in rawdata]
+    data["Item"] = [row["description"] for row in rawdata]
     data["Quantity"] = [row["quantity"] for row in rawdata]
     data["Customer ID"] = [row["custID"] for row in rawdata]
-    data["Time"] = [row["time"] for row in rawdata]
+    data["Time"] = [row["time"].strftime("%B %d, %Y") for row in rawdata]
     data["Address"] = [row["address"] for row in rawdata]
-    data["Status"] = [row["status"] for row in rawdata]
+    data["Status"] = ['Finished' if row["status"] else 'In Process' for row in rawdata]
     
     table_order.source.data = data  
 
@@ -150,9 +153,9 @@ order_options_order = wd.Select(title = "Order by", value = "Time",
                      options = ["Order ID", "Seller ID", "Time", "Status"] )
 
 def change_order_order(attr,old,new):
-    if new == "Order ID":
+    if new == "Seller ID":
         rawdata2 = ana.my_orders(order_by='sellerID', asc=bool(acsd_opt.active))
-    if new == "Seller ID": 
+    if new == "Description":
         rawdata2 = ana.my_orders(order_by='orderID', asc=bool(acsd_opt.active))
     if new == "Time":
        rawdata2 = ana.my_orders(order_by='time', asc=bool(acsd_opt.active))
@@ -175,11 +178,11 @@ labels1 = [
     "Jewelry",
     "Medicine",
     "Car",
-    "Articles of luxury",
+    "Luxury",
     "Packaging",
-    "Digital appliance",
-    "Home improvement products",
-    "Mother and baby products"
+    "Digital Appliance",
+    "Home improvement",
+    "Mother and Baby"
 ]
 
 btnGroupLetters1 = wd.RadioButtonGroup(labels = labels1, active=-1)
